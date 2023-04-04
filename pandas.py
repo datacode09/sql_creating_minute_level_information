@@ -1,7 +1,24 @@
+import cx_Oracle
 import pandas as pd
 
+
 # load input data into a pandas DataFrame
-input_df = pd.read_csv('input_data.csv')
+#input_df = pd.read_csv('input_data.csv')
+
+
+# Set up connection details
+dsn_tns = cx_Oracle.makedsn('your_host', 'your_port', service_name='your_service_name')
+conn = cx_Oracle.connect(user='your_username', password='your_password', dsn=dsn_tns)
+
+# Read SQL query from file
+with open('query.sql', 'r') as f:
+    sql_query = f.read()
+
+# Execute query and load result into dataframe
+df = pd.read_sql(sql_query, conn)
+
+# Close the connection
+conn.close()
 
 # create a list of all possible statuses
 all_statuses = ['busy', 'working', 'unavailable']
